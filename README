@@ -1,0 +1,112 @@
+
+
+	┌──────────┐
+	│  README  │
+	└──────────┘ 
+
+
+SPECIAL NOTICE FOR THIS REPOSITORY
+══════════════════════════════════
+
+This is a strapped down version of the full project submitted for the Advanced Systems Lab course from winter 2018.
+
+The project concerns itself with the development of a middleware for memcached and its instrumentation and subsequent
+in-depth performance analysis.
+
+This repo contains the final report and the middleware source. If you'd like to see any other parts/components, contact
+me through any contact point available on [tobey.dev](https://tobey.dev/). The rest of this readme has been directly copied
+from the full repository.
+
+
+
+
+ON FOLDER STRUCTURE
+═══════════════════
+
+In the main directory asl-fall18-project (which directly contains the middleware source code), there are these folders to be found:
+
+[0] asl-fall18-project
+ \______[1] report.pdf
+  \_____[2] results.zip
+   \____[3] Populator
+    \___[4] report
+     \__[5] Upcooker
+      \_[6] bootstrapping
+           \___[6.1] client_src
+            \__[6.2] middleware_src
+             \_[6.3] server_src
+
+
+[0]:	Contains the source code for the middleware (run ant jar here).
+[1]:	The report.
+[2]:	Contains all experimental results and the plots generated thereof. The structure is as described below.
+[3]:	Contains the source code and class file for the populator, which populates the servers before the experiments. Class file used in [6.3].
+[4]:	Contains all files used to build the report, including copies of the plots from [2].
+[5]:	Contains the source code used to process all raw data and generate plots thereof. Results saved in appropriate subfolders of [2].
+[6]:	Contains the bootstrapper (local client part and remote part as well as main bootstrapper code).
+[6.1]:	Contains the remote client code (run within remote bootstrapper instance).
+[6.2]:	Contains the remote middleware code (run within remote bootstrapper instance).
+[6.3]:	Contains the remote server code (run within remote bootstrapper instance).
+
+
+
+STRUCTURE OF RESULTS DIRECTORY
+══════════════════════════════
+
+Each section (2.1, 2.2, 3.1, ...) has one folder in [2], which contains both the experimental results and the plots corresponding to them.
+
+
+Concerning plots
+────────────────
+	A section's subfolder "plots" contains all plots with system performance metrics such as throughput, response time, queue size and so on.
+	Plots that concern vm performance metrics such as latency or bandwidth usage measurements between hosts or cpu utilization are all located
+	in a subfolder called "sysstat". Both of these folders contain a file "processed.log" which has a table of all the data used in the plots
+	present in the same folder. Note that some plots have been adjusted for certain sections in the report to improve readability.
+
+
+Concerning experimental results
+───────────────────────────────
+	The bootstrapper creates a unique path for each experiment and repetition. Every folder's name indicates the value of a property being equal
+	for all experiment configurations within. For example "workload_0_1" contains all experiment logs that have a read-only workload, whereas all
+	experiment logs contained in "workload_1_0" are write-only. The repetitions are located at the end of the path in seperate folders "repetition_1"
+	to "repetition_3".
+	In a repetition's folder, there is a "clientlog" folder and one folder for each host used in the experiment, containing all its produced logfiles.
+	The "clientlog" directory holds the log files for all remote bootstrapping instances (for debugging purposes only).
+
+	Every host will have the following files present:
+		cpu.txt - Contains continuous measurements of cpu usage captured with mpstat
+		network.txt - Contains continuous measurements bandwith usage caputred with dstat
+		ping_i.text - Contains continuous measurements of latency to host i captured with ping
+		execution_log.txt - Contains the execution log of the bootstrapped code run on the host (contains the middleware log on middleware hosts)
+
+	Uniquely client (memtier) hosts will have the following files present:
+		memtier_i.txt - Contains the log output of the memtier instance that is connected to host i
+
+	Uniquely middleware hosts will have the following files present:
+		i_HG_workerj_type.txt - Contains the histogram output of all operations of the appropriate type that worker j has handled (i is a timestamp)
+		i_PS_workerj_type.txt - Contains the aggregated statistical output of all operations of the appropriate type that worker j has handled (i is a timestamp)
+		i_TT.txt - Contains the aggregated average thinking time for each client as measured by the netthread (i is a timestamp)
+
+	There are no unique files for server (memcached) hosts.
+
+
+Middleware histogram and statistical output format
+──────────────────────────────────────────────────
+	The statistic files (PS, per-second) files the middleware produces, are of the following format (multiple values on one line separated by commas):
+		The first line indicates the number of seconds measured.
+		The second line contains the total number of misses (counting all looked up keys) followed by the total amount of operations executed.
+		The third line contains how many general, server and client errors have been recorded individually.
+		For each second measured, a line is output containing in order (concerning only operations that finished in this timeframe):
+			The index of the timeframe (all timeframes are one second, starting from 0 since empty seconds are cut)
+			How many operations have been finished in this timeframe
+			How many servers the middleware is connected to, followed by (for each server):
+				The average, median and 95th percentile response time for the server (time spent waiting for the servers)
+			The average, median, and 95th percentile response time (time to respond to the clients)
+			The average, median, and 95th percentile queue time (time operations spend in the queue)
+			The average, median, 95th percentile and maximum enqueue size (size of the queue when putting an operation into the queue)
+			The average, median, 95th percentile and maximum dequeue size (size of the queue when removing an operation from the queue)
+
+	The histogram files (HG, histogram) files the middleware produces, are of the following format (multiple values on one line separated by commas):
+		The first line contains the amount of lines (buckets) following.
+		For each bucket, a line it output containing the bucket and its corresponding occurrence count.
+	Bucket resolution is 100 microseconds, the occurrence count indicates how many jobs have a corresponsing rounded response time.

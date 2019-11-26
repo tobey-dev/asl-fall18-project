@@ -1,0 +1,183 @@
+<parameters>
+
+	<!-- Major version changes indicate fixing significant bugs or 
+	changing logic OR any change after a live run was done -->
+	<int>
+		<name>version_major</name>
+		<value>2</value>
+	</int>
+
+	<!-- Minor version changes for compatible changes (e.g. printing out
+	more statistics -->
+	<int>
+		<name>version_minor</name>
+		<value>0</value>
+	</int>
+
+	<!-- revision version changes for small changes that don't affect 
+	functionality (e.g. logging formatting, tiny performance optimizations) -->
+	<int>
+		<name>version_revision</name>
+		<value>0</value>
+	</int>
+
+	<!-- How long to wait on shutdown for NetThread to finish -->
+	<long>
+		<name>netthread_shutdown_timeout_ms</name>
+		<value>500</value>
+	</long>
+
+	<!-- How tight NetThread's main loop is without any events -->
+	<long>
+		<name>netthread_selector_timeout_ms</name>
+		<value>100</value>
+	</long>
+
+	<!-- How tight WorkerThread's main loop is without any events -->
+	<long>
+		<name>worker_thread_poll_timeout_ms</name>
+		<value>100</value>
+	</long>
+
+	<long>
+		<name>worker_thread_selector_timeout_ms</name>
+		<value>100</value>
+	</long>
+
+	<long>
+		<name>worker_pool_join_timeout_ms</name>
+		<value>5000</value>
+	</long>
+
+	<!-- Sockets to servers -->
+	<bool>
+		<name>server_socket_keepalive</name>
+		<value>true</value>
+	</bool>
+
+	<bool>
+		<name>server_socket_tcp_nodelay</name>
+		<value>true</value>
+	</bool>
+
+	<int>
+		<name>server_socket_rcv_buffer_size</name>
+		<value>1048576</value>
+	</int>
+
+	<int>
+		<name>server_socket_snd_buffer_size</name>
+		<value>1048576</value>
+	</int>
+
+	<!-- ServerSocketChannel -->
+	<int>
+		<name>server_socket_channel_rcv_buffer_size</name>
+		<value>1048576</value>
+	</int>
+
+	<int>
+		<name>server_socket_channel_backlog</name>
+		<value>8192</value>
+	</int>
+
+	<!-- Inferred SocketChannel (from ServerSocketChannel) -->
+	<bool>
+		<name>inferred_server_socket_channel_keepalive</name>
+		<value>true</value>
+	</bool>
+
+	<int>
+		<name>inferred_server_socket_channel_rcv_buffer_size</name>
+		<value>1048576</value>
+	</int>
+
+	<int>
+		<name>inferred_server_socket_channel_snd_buffer_size</name>
+		<value>1048576</value>
+	</int>
+
+	<int>
+		<name>inferred_server_socket_channel_linger_timeout_s</name>
+		<value>0</value>
+	</int>
+
+	<bool>
+		<name>inferred_server_socket_channel_tcp_nodelay</name>
+		<value>true</value>
+	</bool>
+
+	<!-- Size of the meta-buffer used to concatenate messages bigger than single packets
+	In the server and client parsers -->
+	<int>
+		<name>assembler_meta_rcv_buffer_size</name>
+		<value>1048576</value>
+	</int>
+
+	<!-- How many keys can be read from a GET request by the QueryAssembler-->
+	<int>
+		<name>assembler_max_keys_readable</name>
+		<value>12</value>
+	</int>
+
+	<!-- How many different value responses the ResponseAssembler can memorize-->
+	<int>
+		<name>assembler_max_responses_mergeable</name>
+		<value>12</value>
+	</int>
+
+	<!-- Queue settings -->
+
+	<!-- Use FIFO for queue (concerning thread servicing order) -->
+	<bool>
+		<name>queue_fifo</name>
+		<value>false</value>
+	</bool>
+
+	<int>
+		<name>queue_capacity</name>
+		<value>30000</value>
+	</int>
+
+	<!-- Statistics settings -->
+	<int>
+		<name>statistics_time_resolution_ms</name>
+		<value>1000</value>
+	</int>
+
+	<int>
+		<name>statistics_histogram_bin_size_ns</name>
+		<value>100000</value>
+	</int>
+
+	<int>
+		<name>statistics_percentile_percent</name>
+		<value>95</value>
+	</int>
+
+	<int>
+		<name>statistics_thinking_times_resolution_ns</name>
+		<value>1</value>
+	</int>
+
+	<bool>
+		<name>statistics_per_job_export</name>
+		<value>false</value>
+	</bool>
+
+	<bool>
+		<name>statistics_per_second_export</name>
+		<value>true</value>
+	</bool>
+	
+	<bool>
+		<name>statistics_histogram_export</name>
+		<value>true</value>
+	</bool>
+
+	<bool>
+		<name>statistics_thinking_times_export</name>
+		<value>true</value>
+	</bool>
+
+</parameters>
